@@ -12,7 +12,7 @@
           </div>
           <div class="p-6">
             <!-- Composition Items -->
-            <app-composition-item v-for="song in songs" :key="song.docID" />
+            <app-composition-item v-for="(song, i) in songs" :key="song.docID" :song="song" />
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@ export default {
 
   async created() {
     const snapshot = await songsCollection.where('uid', '==', 'auth.currentUser.uid').get()
-    snapshot.foreEach((document) => {
+    snapshot.forEach((document) => {
       const song = {
         ...document.data(),
         docID: document.id
