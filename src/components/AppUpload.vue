@@ -57,7 +57,21 @@ export default {
 
       const files = $event.dataTransfer ? [...$event.dataTransfer.files] : [...$event.target.files]
       files.forEach((file) => {
+        // Rejecting files for uploads except for audio/mpeg files
         if (file.type !== 'audio/mpeg') return
+
+        // checking if the user is offline i.e no internet connection
+        if (!navigator.onLine) {
+          this.uploads.push({
+            task: {},
+            current_progress: 100,
+            name: file.name,
+            variant: 'bg-red-400',
+            icon: 'fas fa-times',
+            text_class: 'text-red-400'
+          })
+          return
+        }
 
         const storageRef = storage.ref() // chris-music-3062a.appspot.com'
         const songsRef = storageRef.child(`songs/${file.name}`) // chris-music-3062a.appspot.com/songs/${file.name}'
